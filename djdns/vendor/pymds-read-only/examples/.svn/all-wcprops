@@ -1,0 +1,47 @@
+K 25
+svn:wc:ra_dav:version-url
+V 31
+/svn/!svn/ver/17/trunk/examples
+END
+thomaspinckney.conf
+K 25
+svn:wc:ra_dav:version-url
+V 50
+/svn/!svn/ver/2/trunk/examples/thomaspinckney.conf
+END
+autogenreverse.conf
+K 25
+svn:wc:ra_dav:version-url
+V 51
+/svn/!svn/ver/17/trunk/examples/autogenreverse.conf
+END
+tompinckney.conf
+K 25
+svn:wc:ra_dav:version-url
+V 47
+/svn/!svn/ver/2/trunk/examples/tompinckney.conf
+END
+autogen.conf
+K 25
+svn:wc:ra_dav:version-url
+V 44
+/svn/!svn/ver/17/trunk/examples/autogen.conf
+END
+thomaspinckney.com.txt
+K 25
+svn:wc:ra_dav:version-url
+V 53
+/svn/!svn/ver/2/trunk/examples/thomaspinckney.com.txt
+END
+autogenreverse-override.txt
+K 25
+svn:wc:ra_dav:version-url
+V 59
+/svn/!svn/ver/11/trunk/examples/autogenreverse-override.txt
+END
+tompinckney.com.txt
+K 25
+svn:wc:ra_dav:version-url
+V 50
+/svn/!svn/ver/2/trunk/examples/tompinckney.com.txt
+END

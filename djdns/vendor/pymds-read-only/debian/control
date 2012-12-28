@@ -1,0 +1,18 @@
+Source: pymds
+Section: unknown
+Priority: extra
+Maintainer: Robert Mibus <rmibus@internode.com.au>
+Build-Depends: debhelper (>= 7.0.50~)
+Standards-Version: 3.9.1
+Homepage: http://code.google.com/p/pymds/
+#Vcs-Git: git://git.debian.org/collab-maint/pymds.git
+#Vcs-Browser: http://git.debian.org/?p=collab-maint/pymds.git;a=summary
+
+Package: pymds
+Architecture: all
+Depends: ${misc:Depends}, python-ipaddr
+Description: Python-based modular DNS authoritative nameserver
+ pymds is a Python-based, modular DNS server.
+ .
+ One of its neat features is a backend for automatically faking
+ forwards and reverse entries for IPv6 addresses.

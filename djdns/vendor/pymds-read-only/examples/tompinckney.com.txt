@@ -1,0 +1,42 @@
+#
+# example pymdsfile database file
+#
+# Each line contains a single record of the form:
+# query type answer
+#
+# query must be either the text that is being looked up OR
+# it may be the special symbol @ meaning the empty string
+# for when clients query without a hostname (ie, foo.com)
+#
+# type must be one of A, NS, CNAME, MX, or TXT
+#
+# answer is the value returned to the client.
+#    for A records, it must be a dotter ipv4 address
+#    for NS records, it must be a dotted host name
+#    for CNAME records, it must be a dotted host name
+#    for TXT records, it may be any ASCII string
+#    for MX records, it must be a positive integer priority, a colon, and a host name
+#
+# Multiple records with the same query field may be listed, in which
+# case a client making that query will get all of the results listed in
+# the order they are listed in this file.
+#
+
+@ NS ns1.tompinckney.com
+@ NS ns2.tompinckney.com
+ns1 A 10.10.0.1
+ns2 A 10.20.0.1
+
+@ A 10.10.0.3
+@ A 10.20.0.3
+www A 10.10.0.3
+www A 10.20.0.3
+db A 10.10.0.4
+db A 10.20.0.4
+img-1 CNAME www.tompinckney.com
+img-2 CNAME www.tompinckney.com
+
+@ TXT spf:foo:bar
+@ MX 0:www.tompinckney.com
+
+dev NS ns1.tompinckney.com

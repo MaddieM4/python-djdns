@@ -1,0 +1,5 @@
+[default]
+domain=8.b.d.0.1.0.0.2.ip6.arpa
+source=pymdsautogen:ipv6.example.com:20010db8
+filters=pymdsoverride:autogenreverse-override.txt
+name servers=localhost:127.0.0.1:86400

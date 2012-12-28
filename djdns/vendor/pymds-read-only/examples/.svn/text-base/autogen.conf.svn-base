@@ -1,0 +1,4 @@
+[default]
+domain=ipv6.example.com
+source=pymdsautogen:ipv6.example.com:20010db8
+name servers=localhost:127.0.0.1:86400

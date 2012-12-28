@@ -1,0 +1,17 @@
+pymds (0.3) precise; urgency=low
+
+  * Remove the hard-dependency on Python 2.7's os.initgroups()
+
+ -- Robert Mibus <rmibus@internode.com.au>  Tue, 02 Oct 2012 10:45:13 +0930
+
+pymds (0.2) precise; urgency=low
+
+  * Release fixing handling of non-PTR queries to delegated reverse ranges.
+
+ -- Robert Mibus <rmibus@internode.com.au>  Fri, 28 Sep 2012 16:23:21 +0930
+
+pymds (0.1) lucid; urgency=low
+
+  * Public release
+
+ -- Robert Mibus <rmibus@internode.com.au>  Mon, 09 Jan 2012 11:00:01 +1030
