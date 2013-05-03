@@ -17,7 +17,7 @@ of about 70% of participants to add or remove another participant, but only a li
 information.
 
 The system is cryptographically secure such that you can verify the entire chain of operations given a known
-accurate previous state. If someone tries to send you false information, your ctdns implementation will not
+accurate previous state. If someone tries to send you false information, your djdns implementation will not
 only notice that you're being lied to, but start trying alternate sources of information to find a truthful one.
 Only participants can edit the participant set or the domain information, and it requires group consensus in the
 amounts dictated above.
@@ -61,7 +61,7 @@ have the most recent copy.
 Nope. It's also, in theory, pretty fast, thanks to its push-based design and UDP transport, and only transferring
 control data and deltas. It's a little bit like git-based DNS.
 
-Not only that, but you get to cache a lot. And I mean, a LOT. In the early versions of ctdns, before it becomes too
+Not only that, but you get to cache a lot. And I mean, a LOT. In the early versions of djdns, before it becomes too
 big to be practical anymore except for intentionally participating servers, when you want to resolve (say)
 "brickwindows.ff.ct", you will download and store the entire table of top level domains, the entire table of .ct
 domains, and the entire table of .ff.ct domains. But once you have that stuff, you can just keep it up to date quite
