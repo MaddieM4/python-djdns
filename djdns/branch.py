@@ -2,7 +2,7 @@ import json
 import re
 from deje import document
 
-import handlers
+from djdns import handlers
 
 class Branch(object):
     def __init__(self, name=None, document = None):
