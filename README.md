@@ -1,4 +1,4 @@
-# python-djdns
+# python-DJDNS
 
 This is a DJDNS server written in Python. It is a Decentralized DNS server for a more secure, free internet.
 
@@ -9,18 +9,18 @@ authentication, democratic management, and psychotic levels of cacheability.
 
 ## How resistant is this system to tampering?
 
-Djdns is based on a hierarchy of MCP pages. Each can store references to subpages, which represent subdomains.
-Each page is publicly readable, but only a defined set of participants can write to it, and even then, they
-have to have group consensus. Like any MCP page, participant set changes are Track 2 operations, and for this
-type of page, domain modifications are Track 1. Depending on the page settings, it'll usually take a consensus
-of about 70% of participants to add or remove another participant, but only a little over 30% to modify domain
-information.
+DJDNS is based on a hierarchy of DEJE documents. Each can store references to other documents, based on regexes.
+For example, "You can find out about all \*.hype domains over here in this other place." Each page can hold
+arbitrary data, so that DJDNS will be forward-compatible, but a few types of data will be understood in very
+early versions: domain resolution information, domain ownership information (WHOIS), and EJTP identities. After
+that, it'll probably be used to replace the existing certificate system used by SSL, but that's down the road
+aways.
 
 The system is cryptographically secure such that you can verify the entire chain of operations given a known
-accurate previous state. If someone tries to send you false information, your djdns implementation will not
+accurate previous state. If someone tries to send you false information, your DJDNS implementation will not
 only notice that you're being lied to, but start trying alternate sources of information to find a truthful one.
-Only participants can edit the participant set or the domain information, and it requires group consensus in the
-amounts dictated above.
+Control over who can edit a document is fully customizable, and designed to strike an ideal balance between
+permissive areas and privately controlled areas, and between automation and personal approval.
 
 ### What about Sybil attacks? What is the policy for new domains?
 
@@ -32,21 +32,17 @@ propose rate limiting, but this is very easy to defeat with Sybil attacks - a st
 psychiatric case study of a woman with multiple personality disorder, in which the attacker uses a multitude of
 distinct personas (stolen, or generated mechanically or by hand) to defeat "one per customer" sorta limits.
 
-Djdns takes an entirely different approach that I like to call recursive democracy, which averts such problems 
+DJDNS takes an entirely different approach that I like to call recursive democracy, which averts such problems 
 altogether, by not establishing a "global policy" per se at all, except in the most fundamentally basic and
 democratic terms. As stated earlier in the readme, every page represents a subdomain (except the TLD page, if you
-want to be technical and pedantic about it). You can think of the write-enabled participants as moderators for that
-page, in a mass-moderation scenario. Without group agreement, a change of any kind will fail. This system can easily
-support hundreds of thousands of "moderators", especially thanks to the Digitally Distributed Democracy vote
-augmentation system that lets you declare yourself to be abstaining from voting, and donating your "vote power" to
-another party (or parties, based on percentages) while you're "offline for voting".
+want to be technical and pedantic about it). Each page can have any kind of custom rules for moderation and
+modification of its contents. The TLD can be administrated by a voting consensus of hundreds of thousands of
+people. Your site page can be administrated by your web dude.
 
-So, basically, if you want a domain, the price is to get the moderators of a subdomain page to approve and add your
-information to the page. Whatever their requirements are, are the requirements to get that domain (though it could be
-as small and simple as just asking). In the event of mass adoption, you'll have these x.y.z.something.or.other crazy
-long subdomains managed by just a few people, which are easy to obtain; and top-level domains, which require community
-approval and momentum on a massive scale, and thus will be much better-vetted and more valuable. And every subdomain
-page is invite-only for write permissions.
+Some pages will use automatic approval (domain follows specific rules and isn't taken? Add it to the list!),
+others will use manual (must be approved by some critical mass of moderators), some will use a combination.
+The price of a domain is just convincing a system or group of people to point a delegation regex to your
+DJDNS document.
 
 ## And there's no name collisions... ever?
 
@@ -58,35 +54,18 @@ have the most recent copy.
 
 ## Is this a high-bandwidth thing?
 
-Nope. It's also, in theory, pretty fast, thanks to its push-based design and UDP transport, and only transferring
-control data and deltas. It's a little bit like git-based DNS.
-
-Not only that, but you get to cache a lot. And I mean, a LOT. In the early versions of djdns, before it becomes too
-big to be practical anymore except for intentionally participating servers, when you want to resolve (say)
-"brickwindows.ff.ct", you will download and store the entire table of top level domains, the entire table of .ct
-domains, and the entire table of .ff.ct domains. But once you have that stuff, you can just keep it up to date quite
-passively, and not have to do any sort of DNS query at all to the internet to resolve *.ff.ct or *.ct domains. If
-you've noticed that this completely prepares you for the censorship apocalypse scenario where the government blocks
-or DDoS's every single source of domain information, you get a jammy dodger.
-
-The secret is that djdns sets up as an MCP node for the internet at large (P2P, distributed protocol over UDP and
-other transports), and as a DNS server on localhost. So you configure your computer to use itself as a nameserver,
-et voila, it will accept regular old DNS requests, do any MCP requests/downloading necessary (usually none, after 
-"warming up"), and return the resolved name just like that. All your existing technology will *just work.*
+Depends on what pages you're hosting, and how many people are hitting your server with DNS requests. But generally,
+no, fairly low-bandwidth EJTP stuff.
 
 ## Are there any downsides?
 
-Well, only one big one. You may have picked up on a design intention: the more people who have vote priveleges, the
-more resistant to change a page is, because it needs more people to agree. This works very well for preventing
-destructive or disruptive changes from poisoning the system, but also inhibits reaction time in the event of a service
-moving to a different IP address, or being hacked by Estonians. There may be serious delays for top-level pages to
-catch up to reality.
+Some specific documents may be bandwidth- or disk-intensive, like the TLD.
 
 ## How close is this to completion?
 
 Hard to say, I've only just started it (though I have some very strong design ideas, so it's more a matter of implementing
 those and filling in the gaps than figuring it all out as I go). Quite a bit of the work will be handled "invisibly" by
-the DEJE library project, and most of the remainder is setting up the DNS server face of it, and the page
+the DEJE library project, and most of the remainder is setting up the DNS server face of it, and the document
 structure specifics.
 
 So basically, I have no idea, and refuse to make any sort of promises about deadlines, until I'm quite confident in my
@@ -95,5 +74,5 @@ ability to acheive them without running into unexpected complications.
 ## Is this anything like CJDNS?
 
 No, and the confusion is mostly on the part of CJD for naming his really cool software in a really misleading way. CJDNS
-stands for CJD's Networking Suite, and doesn't do DNS at all. Djdns stands for DEJE DNS, and DNS is all it does.
+stands for CJD's Networking Suite, and doesn't do DNS at all. DJDNS stands for DEJE DNS, and DNS is all it does.
 You can think of it as *CJD NS* vs *DJ DNS*.
