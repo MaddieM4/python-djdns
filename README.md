@@ -2,6 +2,37 @@
 
 This is a DJDNS server written in Python. It is a Decentralized DNS server for a more secure, free internet.
 
+# Proof-of-concept Install Guide
+
+Right now none of the P2P magic works or is used, due to the so-called "bootstrapping issue" in DEJE.All the data is fed from on-disk files that would normally be hosted in DEJE. The positive side is that you can try out DJDNS in its current demo state without installing a bunch of extra crap.
+
+In these instructions, we're going to build and install everything in a virtualenv, so that nothing touches the system state, and cleaning up is as simple as deleting the 'djdns' virtualenv folder afterwards. Keep in mind that I have no idea how you would install this on Windows, this is all UNIX-y command line stuff and assumes you have git and python-virtualenv installed.
+
+```bash
+$ virtualenv djdns
+$ cd djdns
+$ source ./bin/activate
+$ git clone https://github.com/campadrenalin/pymads
+$ git clone https://github.com/campadrenalin/python-djdns
+$ cd pymads
+$ python setup.py install
+$ cd ../python-djdns
+$ python setup.py install
+$ python -m djdns.server # Run the server
+```
+
+Now, in another terminal or tab or whatever, you should be able to hit that running server with DNS requests using the program 'dig' (you may need to install the dnsutils package).
+
+```bash
+$ dig @localhost -p 8989 in.root.demo       # 1.2.3.4
+$ dig @localhost -p 8989 in.subbranch.demo  # 5.5.5.5
+$ dig @localhost -p 8989 in.b3.demo         # 5.6.7.8
+```
+
+Feel free to explore the diskdemo directory and play with its contents, to see how the traversable structure of DJDNS works. For further reference on the specification, see [this Github comment](https://github.com/campadrenalin/python-djdns/issues/2#issuecomment-18111938).
+
+# About DJDNS
+
 ## Decentralized DNS is cool.
 
 Which is why I'm building a version on top of the DEJE library. The DEJE platform provides security,
