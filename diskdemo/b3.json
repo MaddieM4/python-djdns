@@ -1,0 +1,14 @@
+{
+    "branches": [
+        {
+            "selector": "^in.b3.demo$",
+            "targets": [],
+            "records": [
+                {
+                    "domain_name": "in.b3.demo",
+                    "rdata": "5.6.7.8"
+                }
+            ]
+        }
+    ]
+}

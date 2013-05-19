@@ -1,19 +1,19 @@
 {
     "branches": [
         {
-            "selector": "^in.root.demo$",
+            "selector": "^in.subbranch.demo$",
             "targets": [],
             "records": [
                 {
-                    "domain_name": "in.root.demo",
-                    "rdata": "1.2.3.4"
+                    "domain_name": "in.subbranch.demo",
+                    "rdata": "5.5.5.5"
                 }
             ]
         },
         {
-            "selector": "(subbranch|b3).demo$",
+            "selector": "b3.demo$",
             "targets": [
-                "diskdemo/subbranch.json"
+                "diskdemo/b3.json"
             ],
             "records": []
         }

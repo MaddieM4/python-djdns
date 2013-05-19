@@ -1,3 +1,5 @@
+from __future__ import print_function
+
 import re
 from pymads.sources.json import toRecord
 
@@ -15,14 +17,43 @@ class DJSource(object):
     >>> root = DiskLoader('diskdemo/root.json')
     >>> source = DJSource(root, DiskLoader)
 
-    >>> r_root   = Request(0, ['in','root','demo'], 0,0, None) # in.root.demo
-    >>> r_branch = Request(0, ['in','subbranch','demo'], 0,0, None) # in.subbranch.demo
+    >>> r_root   = Request(0, ['in','root','demo'], 0,0, None)         # in.root.demo
+    >>> r_branch = Request(0, ['in','subbranch','demo'], 0,0, None)    # in.subbranch.demo
+    >>> r_b3     = Request(0, ['in','b3','demo'], 0,0, None)           # in.b3.demo
     >>> r_none   = Request(0, ['not','stored','in','demo'], 0,0, None) # not.stored.in.demo
 
-    >>> source.get(r_root)
-    []
-    >>> source.get(r_branch)
-    []
+    Testing a retrieval from the root document
+
+    >>> a_root = source.get(r_root)
+    >>> a_root #doctest: +ELLIPSIS
+    [<pymads.record.Record object at ...>]
+    >>> print(a_root[0].rdata)
+    1.2.3.4
+    >>> print(a_root[0].domain_name)
+    in.root.demo
+
+    Testing a traversed retrieval in a subbranch
+
+    >>> a_branch = source.get(r_branch)
+    >>> a_branch #doctest: +ELLIPSIS
+    [<pymads.record.Record object at ...>]
+    >>> print(a_branch[0].rdata)
+    5.5.5.5
+    >>> print(a_branch[0].domain_name)
+    in.subbranch.demo
+
+    Third branch of heirarchy.
+
+    >>> a_b3 = source.get(r_b3)
+    >>> a_b3 #doctest: +ELLIPSIS
+    [<pymads.record.Record object at ...>]
+    >>> print(a_b3[0].rdata)
+    5.6.7.8
+    >>> print(a_b3[0].domain_name)
+    in.b3.demo
+
+    Testing for a domain that isn't in the data at all
+
     >>> source.get(r_none)
     []
     '''
@@ -34,7 +65,7 @@ class DJSource(object):
         root = root or self.root
         name = request.name
 
-        for branch in self.branches:
+        for branch in root['branches']:
             selector = branch['selector']
             if re.search(selector, name):
                 return self.resolve_from(request, branch)
@@ -46,7 +77,7 @@ class DJSource(object):
         else:
             for target_uri in branch['targets']:
                 target  = self.loader(target_uri)
-                results = self.get(target)
+                results = self.get(request, target)
                 if results:
                     return results
             return []
