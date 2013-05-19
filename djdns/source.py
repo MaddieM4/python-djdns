@@ -17,10 +17,10 @@ class DJSource(object):
     >>> root = DiskLoader('diskdemo/root.json')
     >>> source = DJSource(root, DiskLoader)
 
-    >>> r_root   = Request(0, ['in','root','demo'], 0,0, None)         # in.root.demo
-    >>> r_branch = Request(0, ['in','subbranch','demo'], 0,0, None)    # in.subbranch.demo
-    >>> r_b3     = Request(0, ['in','b3','demo'], 0,0, None)           # in.b3.demo
-    >>> r_none   = Request(0, ['not','stored','in','demo'], 0,0, None) # not.stored.in.demo
+    >>> r_root   = 'in.root.demo'
+    >>> r_branch = 'in.subbranch.demo'
+    >>> r_b3     = 'in.b3.demo'
+    >>> r_none   = 'not.stored.in.demo'
 
     Testing a retrieval from the root document
 
@@ -63,11 +63,10 @@ class DJSource(object):
 
     def get(self, request, root = None):
         root = root or self.root
-        name = request.name
 
         for branch in root['branches']:
             selector = branch['selector']
-            if re.search(selector, name):
+            if re.search(selector, request):
                 return self.resolve_from(request, branch)
         return []
 
