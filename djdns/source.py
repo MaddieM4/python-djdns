@@ -26,31 +26,19 @@ class DJSource(object):
 
     >>> a_root = source.get(r_root)
     >>> a_root #doctest: +ELLIPSIS
-    [<pymads.record.Record object at ...>]
-    >>> print(a_root[0].rdata)
-    1.2.3.4
-    >>> print(a_root[0].domain_name)
-    in.root.demo
+    [<record for in.root.demo: 1800 A IN 1.2.3.4>]
 
     Testing a traversed retrieval in a subbranch
 
     >>> a_branch = source.get(r_branch)
     >>> a_branch #doctest: +ELLIPSIS
-    [<pymads.record.Record object at ...>]
-    >>> print(a_branch[0].rdata)
-    5.5.5.5
-    >>> print(a_branch[0].domain_name)
-    in.subbranch.demo
+    [<record for in.subbranch.demo: 1800 A IN 5.5.5.5>]
 
     Third branch of heirarchy.
 
     >>> a_b3 = source.get(r_b3)
     >>> a_b3 #doctest: +ELLIPSIS
-    [<pymads.record.Record object at ...>]
-    >>> print(a_b3[0].rdata)
-    5.6.7.8
-    >>> print(a_b3[0].domain_name)
-    in.b3.demo
+    [<record for in.b3.demo: 1800 A IN 5.6.7.8>]
 
     Testing for a domain that isn't in the data at all
 
