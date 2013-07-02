@@ -16,6 +16,13 @@
                 "diskdemo/subbranch.json"
             ],
             "records": []
+        },
+        {
+            "selector": "example.org$",
+            "targets": [
+                "dns://8.8.8.8/"
+            ],
+            "records": []
         }
     ]
 }

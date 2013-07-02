@@ -26,6 +26,12 @@ class DJServer(DnsServer):
     >>> success_text in host_data
     True
 
+    >>> host_data = dig('example.org', 'localhost', port)
+    >>> "ANSWER SECTION:\\nexample.org.\\t\\t" in host_data
+    True
+    >>> "\\tIN\\tA\\t192.0.43.10\\n\\n" in host_data
+    True
+
     >>> server.stop()
     >>> thread.join()
     '''

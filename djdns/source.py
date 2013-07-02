@@ -3,9 +3,10 @@ from __future__ import print_function
 import re
 from pymads.sources.json import toRecord
 
-from djdns.loader import DocLoader
+from djdns.loader   import DocLoader
+from djdns.resolver import Resolver
 
-class DJSource(object):
+class DJSource(Resolver):
     '''
     Pymads Source that traverses DJDNS branches.
 
@@ -24,26 +25,29 @@ class DJSource(object):
 
     Testing a retrieval from the root document
 
-    >>> a_root = source.get(r_root)
-    >>> a_root #doctest: +ELLIPSIS
+    >>> source.get(r_root) #doctest: +ELLIPSIS
     [<record for in.root.demo: 1800 A IN 1.2.3.4>]
 
     Testing a traversed retrieval in a subbranch
 
-    >>> a_branch = source.get(r_branch)
-    >>> a_branch #doctest: +ELLIPSIS
+    >>> source.get(r_branch) #doctest: +ELLIPSIS
     [<record for in.subbranch.demo: 1800 A IN 5.5.5.5>]
 
     Third branch of heirarchy.
 
-    >>> a_b3 = source.get(r_b3)
-    >>> a_b3 #doctest: +ELLIPSIS
+    >>> source.get(r_b3) #doctest: +ELLIPSIS
     [<record for in.b3.demo: 1800 A IN 5.6.7.8>]
 
     Testing for a domain that isn't in the data at all
 
     >>> source.get(r_none)
     []
+
+    Testing for recursive DNS domain
+
+    >>> list(source.get('example.org')) #doctest: +ELLIPSIS
+    [<record for example.org: ... A IN 192.0.43.10>]
+
     '''
     def __init__(self, uri = "", loader = None, rootdata = None):
         self.uri = uri
@@ -68,7 +72,10 @@ class DJSource(object):
         else:
             for target_uri in branch['targets']:
                 target  = self.load(target_uri)
-                results = self.get(request, target)
+                if isinstance(target, Resolver):
+                    results = target.get(request)
+                else:
+                    results = self.get(request, target)
                 if results:
                     return results
             return []
