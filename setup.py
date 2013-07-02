@@ -14,7 +14,6 @@ setup(
     ],
     packages = [
         'djdns',
-        'djdns.loaders',
     ],
 )
 

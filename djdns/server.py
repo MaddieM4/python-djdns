@@ -4,7 +4,6 @@ from pymads.server import DnsServer
 from pymads.chain  import Chain
 
 from djdns.source import DJSource
-from djdns.loaders.disk import DiskLoader
 
 class DJServer(DnsServer):
     '''
@@ -36,8 +35,7 @@ class DJServer(DnsServer):
         else:
             self.path = 'diskdemo/root.json'
 
-        root = DiskLoader(self.path)
-        self.source = DJSource(root, DiskLoader)
+        self.source = DJSource(self.path)
         self.chain = Chain([self.source])
         config['chains'] = [self.chain]
         DnsServer.__init__(self, **config)

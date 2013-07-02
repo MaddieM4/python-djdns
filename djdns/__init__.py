@@ -3,5 +3,5 @@
 __all__ = [
     "server",
     "source",
-    "loaders",
+    "loader",
 ]

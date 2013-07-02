@@ -3,6 +3,8 @@ from __future__ import print_function
 import re
 from pymads.sources.json import toRecord
 
+from djdns.loader import DocLoader
+
 class DJSource(object):
     '''
     Pymads Source that traverses DJDNS branches.
@@ -13,9 +15,7 @@ class DJSource(object):
     dictlike object (used for traversal). Blocking is fine.
 
     >>> from pymads.request import Request
-    >>> from djdns.loaders.disk import DiskLoader
-    >>> root = DiskLoader('diskdemo/root.json')
-    >>> source = DJSource(root, DiskLoader)
+    >>> source = DJSource('diskdemo/root.json')
 
     >>> r_root   = 'in.root.demo'
     >>> r_branch = 'in.subbranch.demo'
@@ -45,9 +45,13 @@ class DJSource(object):
     >>> source.get(r_none)
     []
     '''
-    def __init__(self, root, loader):
-        self.root = root
-        self.loader = loader
+    def __init__(self, uri = "", loader = None, rootdata = None):
+        self.uri = uri
+        self.loader = loader or DocLoader()
+        self.root = rootdata or self.load(self.uri)
+
+    def load(self, uri):
+        return self.loader.load(uri)
 
     def get(self, request, root = None):
         root = root or self.root
@@ -63,7 +67,7 @@ class DJSource(object):
             return [toRecord(x, branch['selector']) for x in branch['records']]
         else:
             for target_uri in branch['targets']:
-                target  = self.loader(target_uri)
+                target  = self.load(target_uri)
                 results = self.get(request, target)
                 if results:
                     return results
