@@ -10,7 +10,7 @@ setup(
     author_email = 'philip.horger@gmail.com',
     url = 'https://github.com/campadrenalin/python-djdns/',
     scripts = [
-        #'scripts/djdns',
+        'scripts/djdns',
     ],
     packages = [
         'djdns',
