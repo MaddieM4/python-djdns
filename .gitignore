@@ -1,5 +1,8 @@
 *.py[cod]
 
+# Test environments
+testenv
+
 # C extensions
 *.so
 
