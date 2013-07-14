@@ -27,6 +27,12 @@ This automatically downloads and uses djdns-hype-flat as the source data. DJDNS 
 
 When DJDNS or your source data has an update, you can apply it with the update.sh script in the scripts folder. This must be run as root.
 
+```bash
+$ cd python-djdns
+$ git pull # Not done automatically by update script
+$ sudo scripts/update.sh
+```
+
 This should even work seamlessly for alternative data directories as long as they are git repositories, such that 'git pull' will bring the data up-to-date.
 
 # Development setup
