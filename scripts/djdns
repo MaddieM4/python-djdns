@@ -26,6 +26,7 @@ import pwd
 import threading
 import time
 import traceback
+from setproctitle import setproctitle
 
 from djdns.server import DJServer
 
@@ -63,6 +64,7 @@ def serve_wait(*servers):
         server.thread.join(1)
 
 if __name__ == '__main__':
+    setproctitle('djdns')
     arguments = docopt(__doc__, version='0.0.1')
     os.chdir(arguments['-d'])
 
