@@ -53,6 +53,9 @@ function setup_virtualenv {
 
     . $venv_dir/bin/activate
     pip install -r $repo_dir/requirements.txt
+    if python --version 2>&1 | grep ' 2.6'; then
+        pip install unittest2
+    fi
     cd $repo_dir
     python setup.py install
     deactivate
