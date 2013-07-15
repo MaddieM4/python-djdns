@@ -9,7 +9,11 @@ venv_dir=/var/dns/venv
 data_dir=/var/dns/data
 
 function user_exists {
-    id "$1" > /dev/null 2>&1
+    if id "$1" > /dev/null 2>&1; then
+        echo "true";
+    else
+        echo "false";
+    fi;
 }
 
 function create_user {
@@ -18,6 +22,18 @@ function create_user {
     local shell=`which nologin`
 
     useradd -s $shell --system --home /var/dns $uname
+}
+
+function setup_user {
+    echo -n "Does user $uname exist... "
+    local exists=$(user_exists $uname)
+    echo "$exists"
+    case $exists in
+        true)   echo "user $uname exists";;
+        false)  echo "user $uname does not exist, creating...";
+                create_user $uname;;
+        *) echo "Failure. WTF."; exit 1;;
+    esac
 }
 
 function setup_initscript {
@@ -55,14 +71,7 @@ function setup_data {
     git clone $repo $data_dir
 }
 
-echo "Does user $uname exist..."
-user_exists $uname
-case $? in
-    1) echo "user $uname does not exist, creating..."; create_user $uname;;
-    0) echo "user $uname exists";;
-    *) echo "idk lol $?"; exit 1;;
-esac
-
+setup_user
 setup_initscript
 setup_virtualenv
 setup_data
