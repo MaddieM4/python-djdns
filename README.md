@@ -2,11 +2,49 @@
 
 This is a DJDNS server written in Python. It is a Decentralized DNS server for a more secure, free internet.
 
-Right now none of the P2P magic works or is used, due to the so-called "bootstrapping issue" in DEJE.All the data is fed from on-disk files that would normally be hosted in DEJE. The positive side is that you can try out DJDNS in its current demo state without installing as much extra crap.
+Right now none of the P2P magic works or is used, due to the so-called "bootstrapping issue" in DEJE.All the data is fed from on-disk files that would normally be hosted in DEJE. The positive side is that you can install a DJDNS server in its current demo state without installing as much extra crap as dependencies.
+
+A nifty feature of DJDNS is how handy it is at deferal. It uses public servers to flexibly resolve ICANN, Namecoin, and OpenNIC records, with more alternative DNS deferals to come. Just make an issue [in djdns-flat-hype][dhf] for your favorite(s), and I'll go about adding support! Same goes for personal domains - make an issue or a pull request, and I'll probably get it merged, as long as it's not too contentious.
+
+## Try out the public alpha now!
+
+I'm running a server on roaming-initiative.com for people to use on and off the meshnet. To use it:
+
+### Back up your existing conf
+
+If something goes terribly wrong, whether on your end or mine, you'll want to have your old config back. So in your shell, do this:
+
+    $ cp /etc/resolv.conf /etc/resolv.conf.bak
+
+Or more succinctly (although I think it's specific to bash):
+
+    $ cp /etc/resolv.conf{,.bak}
+
+That way, you can copy the original back over later if you have to.
+
+### Put in the new conf
+
+Replace the contents of /etc/resolv.conf with the following:
+
+    nameserver [fcd5:7d07:2146:f18f:f937:d46e:77c9:80e7]
+    nameserver 173.255.210.202
+    nameserver 8.8.8.8
+
+These are, respectively:
+
+ * Roaming Initiative on Hyperboria.
+ * Roaming Initiative via IPv4 Clearnet.
+ * Google Public DNS.
+
+This should be a pretty sane chain of fallbacks for most alpha testers, but don't be afraid to mix things up and experiment if you feel like it. That's what config backups are for!
+
+### Report any issues here on Github
+
+This project uses the Github issue tracker. If you don't use GH and don't intend to, you can email me at philip@roaming-initiative.com, or find me on HypeIRC.
 
 # Production installation
 
-This is the new and vastly simpler system for installing DJDNS in a production environment. All you need to do to install and start DJDNS, such that it starts immediately and on reboots, and is controllable through /etc/init.d/djdns?
+This is the new and vastly simpler system for installing DJDNS in a production environment on your own server. All you need to do to install and start DJDNS, such that it starts immediately and on reboots, and is controllable through /etc/init.d/djdns?
 
 ```bash
 $ git clone https://github.com/campadrenalin/python-djdns
@@ -21,7 +59,7 @@ $ dig @localhost ri.hype
 $ dig @localhost dot-bit.bit
 ```
 
-This automatically downloads and uses djdns-hype-flat as the source data. DJDNS production installations will serve based on whatever is in /var/dns/data, so it's easy to use a different page repo if you want.
+This automatically downloads and uses [djdns-hype-flat][dhf] as the source data. DJDNS production installations will serve based on whatever is in /var/dns/data, so it's easy to use a different page repo if you want.
 
 ## Updating DJDNS
 
@@ -127,16 +165,16 @@ Some specific documents may be bandwidth- or disk-intensive, like the TLD.
 
 ## How close is this to completion?
 
-Hard to say, I've only just started it (though I have some very strong design ideas, so it's more a matter of implementing
-those and filling in the gaps than figuring it all out as I go). Quite a bit of the work will be handled "invisibly" by
-the DEJE library project, and most of the remainder is setting up the DNS server face of it, and the document
-structure specifics.
+I have a public server running the alpha version, which is buggy but surprisingly usable. It uses [flat files][dhf] instead of DEJE documents, which will change when DEJE becomes mature enough.
 
-So basically, I have no idea, and refuse to make any sort of promises about deadlines, until I'm quite confident in my
-ability to acheive them without running into unexpected complications.
+It is also easy to set up your own public server, as that's basically an automated process now. If you want to publicly serve via DJDNS, *it is not hard.*
+
+I have a fairly well-defined roadmap from here, in terms of tasks. A bunch of small bugfixes and features and such, and one big important project (switch to DEJE) looming in the future. The only thing I don't know is the timetable. It'll be ready when it's ready.
 
 ## Is this anything like CJDNS?
 
 No, and the confusion is mostly on the part of CJD for naming his really cool software in a really misleading way. CJDNS
 stands for CJD's Networking Suite, and doesn't do DNS at all. DJDNS stands for DEJE DNS, and DNS is all it does.
 You can think of it as *CJD NS* vs *DJ DNS*.
+
+[dhf]: https://github.com/campadrenalin/djdns-hype-flat
