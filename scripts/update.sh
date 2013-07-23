@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -e
+
 script_dir="`dirname $0`"
 repo_dir="$script_dir/.."
 venv_dir=/var/dns/venv
@@ -9,6 +11,7 @@ function update_djdns {
     echo "Updating DJDNS..."
     . "$venv_dir/bin/activate"
     cd "$repo_dir"
+    pip install --upgrade -r requirements.txt
     yes | pip uninstall djdns
     python setup.py install
     deactivate

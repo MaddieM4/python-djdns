@@ -25,27 +25,27 @@ class DJSource(Resolver):
 
     Testing a retrieval from the root document
 
-    >>> source.get(r_root) #doctest: +ELLIPSIS
+    >>> source.get_from_name(r_root) #doctest: +ELLIPSIS
     [<record for in.root.demo: 1800 A IN... 1.2.3.4>]
 
     Testing a traversed retrieval in a subbranch
 
-    >>> source.get(r_branch) #doctest: +ELLIPSIS
+    >>> source.get_from_name(r_branch) #doctest: +ELLIPSIS
     [<record for in.subbranch.demo: 1800 A IN... 5.5.5.5>]
 
     Third branch of heirarchy.
 
-    >>> source.get(r_b3) #doctest: +ELLIPSIS
+    >>> source.get_from_name(r_b3) #doctest: +ELLIPSIS
     [<record for in.b3.demo: 1800 A IN... 5.6.7.8>]
 
     Testing for a domain that isn't in the data at all
 
-    >>> source.get(r_none)
+    >>> source.get_from_name(r_none)
     []
 
     Testing for recursive DNS domain
 
-    >>> list(source.get('example.org')) #doctest: +ELLIPSIS
+    >>> list(source.get_from_name('example.org')) #doctest: +ELLIPSIS
     [<record for example.org: ... A IN... 192.0.43.10>]
 
     '''
@@ -62,7 +62,7 @@ class DJSource(Resolver):
 
         for branch in root['branches']:
             selector = branch['selector']
-            if re.search(selector, request):
+            if re.search(selector, request.name):
                 return self.resolve_from(request, branch)
         return []
 

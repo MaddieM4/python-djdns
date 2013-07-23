@@ -1,13 +1,23 @@
+from pymads.request import Request
+
 class Resolver(object):
     '''
     Taxonomical class for objects that fulfill Resolver interface.
     '''
 
-    def get(self, domain_name):
+    def get(self, request):
+        '''
+        Takes pymads Request, returns array of pymads records.
+        '''
+        raise NotImplementedError('Resolver subclass must define get()')
+
+    def get_from_name(self, domain_name):
         '''
         Takes domain name, returns array of pymads records.
         '''
-        raise NotImplementedError('Resolver subclass must define get()')
+        request = Request()
+        request.name = domain_name
+        return self.get(request)
 
 class ResolverWrapper(Resolver):
     '''
@@ -18,5 +28,5 @@ class ResolverWrapper(Resolver):
     def __init__(self, source):
         self.source = source
 
-    def get(self, domain_name):
-        return self.source.get(domain_name)
+    def get(self, request):
+        return self.source.get(request)
