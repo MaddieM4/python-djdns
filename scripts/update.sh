@@ -15,6 +15,9 @@ function update_djdns {
     yes | pip uninstall djdns
     python setup.py install
     deactivate
+
+    cp "$script_dir/wrapper.sh" /usr/bin/djdns
+    cp "$script_dir/sysvrc" /etc/init.d/djdns
 }
 
 function update_source_data {

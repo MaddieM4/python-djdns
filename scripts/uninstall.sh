@@ -10,5 +10,5 @@ data_dir=/var/dns/data
 
 /etc/init.d/djdns stop && true
 rm -r "$venv_dir" "$data_dir"
-rm /etc/init.d/djdns
+rm /etc/init.d/djdns /usr/bin/djdns
 update-rc.d -f djdns remove

@@ -37,6 +37,7 @@ function setup_user {
 }
 
 function setup_initscript {
+    cp "$script_dir/wrapper.sh" /usr/bin/djdns
     cp "$script_dir/sysvrc" /etc/init.d/djdns
     update-rc.d djdns start 20 2 3 4 5 . stop 20 0 1 6 .
 }
