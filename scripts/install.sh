@@ -38,7 +38,7 @@ function setup_user {
 
 function setup_initscript {
     cp "$script_dir/sysvrc" /etc/init.d/djdns
-    update-rc.d djdns start 20 2 3 4 5 . stop 20 0 1 6
+    update-rc.d djdns start 20 2 3 4 5 . stop 20 0 1 6 .
 }
 
 function setup_virtualenv {
@@ -75,9 +75,9 @@ function setup_data {
 }
 
 setup_user
-setup_initscript
 setup_virtualenv
 setup_data
 
 chown -R $uname:$uname /var/dns/
+setup_initscript
 /etc/init.d/djdns start
