@@ -6,4 +6,13 @@ before_install:
   - sudo apt-get install python2.5-dev python2.6-dev python2.7-dev python3.1-dev python3.2-dev python3.3-dev
   - sudo apt-get install dnsutils luajit libluajit-5.1-dev
 
+  - tox -e py31 --notest
+  - source .tox/py31/bin/activate
+  - wget -O smh.tar.gz https://pypi.python.org/packages/source/b/backports.ssl_match_hostname/backports.ssl_match_hostname-3.2a3.tar.gz
+  - tar xvf smh.tar.gz
+  - cd smh
+  - python setup.py build install
+  - cd ..
+  - rm -r smh smh.tar.gz
+
 script: tox
