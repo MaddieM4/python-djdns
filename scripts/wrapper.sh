@@ -11,6 +11,8 @@ data_dir=/var/dns/data
 # WRAPPER : Run djdns from the virtualenv, in the console.
 # Useful for debugging when djdns refuses to start.
 
+# It mostly works like sysvrc, except with -v on.
+
 if [[ -d "$venv_dir" ]]; then
     echo "Activating into virtualenv $venv_dir"
     source "$venv_dir/bin/activate"
@@ -19,4 +21,4 @@ else
 fi
 
 echo "Starting djdns..."
-djdns -d "$data_dir" -u $uname -g $uname
+djdns -d "$data_dir" -u $uname -g $uname -v

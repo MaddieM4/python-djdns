@@ -17,6 +17,7 @@ Options:
     -h HOST    Hostname to host on [default: ::]
     -u USER    User to run as during regular operation  [default: nobody]
     -g GROUP   Group to run as during regular operation [default: nogroup]
+    -v         Verbose output
 '''
 
 from docopt import docopt
@@ -77,8 +78,8 @@ if __name__ == '__main__':
     config = {
         'listen_host': host,
         'listen_port': port,
-        'path' : arguments['-r'],
-        'debug' : False,
+        'path'  : arguments['-r'],
+        'debug' : arguments['-v'],
     }
 
     server = DJServer(**config)
