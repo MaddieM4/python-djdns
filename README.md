@@ -61,6 +61,10 @@ $ dig @localhost dot-bit.bit
 
 This automatically downloads and uses [djdns-hype-flat][dhf] as the source data. DJDNS production installations will serve based on whatever is in /var/dns/data, so it's easy to use a different page repo if you want.
 
+If this does not work, we now include a debug wrapper that allows you to run djdns within the terminal, instead of as a daemon, using the system virtualenv and /var/dns/data. This is great for quickly diagnosing why djdns doesn't start. And the wrapper script is installed into a handy location, too.
+
+    $ sudo djdns
+
 ## Updating DJDNS
 
 When DJDNS or your source data has an update, you can apply it with the update.sh script in the scripts folder. This must be run as root.
@@ -72,6 +76,14 @@ $ sudo scripts/update.sh
 ```
 
 This should even work seamlessly for alternative data directories as long as they are git repositories, such that 'git pull' will bring the data up-to-date.
+
+## Uninstalling DJDNS
+
+All global stuff installation stuff will be cleaned up if you run:
+
+    $ sudo ./scripts/uninstall.sh
+
+This will stop the service if it's running, remove installed files, etc.
 
 # Development setup
 
