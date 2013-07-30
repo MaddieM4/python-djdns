@@ -14,6 +14,7 @@ setup(
     ],
     packages = [
         'djdns',
+        'djdns.tests',
     ],
 )
 
