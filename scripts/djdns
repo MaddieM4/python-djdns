@@ -20,6 +20,8 @@ Options:
     -v         Verbose output
 '''
 
+from __future__ import print_function
+
 from docopt import docopt
 import os
 import grp
@@ -60,13 +62,13 @@ def serve_wait(*servers):
         pass
 
     for server in servers:
-        print "STOPPING SERVER %r" % server
+        print("STOPPING SERVER", server)
         server.stop()
         server.thread.join(1)
 
-if __name__ == '__main__':
+def main(argv):
     setproctitle('djdns')
-    arguments = docopt(__doc__, version='0.0.1')
+    arguments = docopt(__doc__, argv=argv, version='0.0.1')
     os.chdir(arguments['-d'])
 
     host = arguments['-h']
@@ -92,3 +94,7 @@ if __name__ == '__main__':
 
     server.thread = serve_threaded(server)
     serve_wait(server)
+
+if __name__ == '__main__':
+    import sys
+    main(sys.argv)
