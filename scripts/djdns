@@ -14,7 +14,7 @@ Options:
     -d DIR     Root directory for domain information [default: .]
     -r ROOT    Path to root.json (relative to DIR)   [default: root.json]
     -p PORT    Port to host on [default: 53]
-    -h HOST    Hostname to host on [default: ::]
+    -H HOST    Hostname to host on [default: ::]
     -u USER    User to run as during regular operation  [default: nobody]
     -g GROUP   Group to run as during regular operation [default: nogroup]
     -v         Verbose output
@@ -68,6 +68,8 @@ def serve_wait(*servers):
 
 def main(argv):
     setproctitle('djdns')
+    argv[0] = 'djdns' # Insulate against docopt being silly
+    print(argv)
     arguments = docopt(__doc__, argv=argv, version='0.0.1')
     os.chdir(arguments['-d'])
 
