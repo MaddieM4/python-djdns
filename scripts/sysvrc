@@ -14,7 +14,7 @@ USER=djdns
 VENV_DIR="/var/dns/venv" # Set to "" for global installation
 DATA_DIR="/var/dns/data" # Root directory of DJDNS pages
 CMD="djdns"
-CMD_ARGS="-d $DATA_DIR -u $USER -g $USER"
+CMD_ARGS="-d $DATA_DIR -u $USER"
 
 ########## Common
 PATH=/sbin:/bin:/usr/sbin:/usr/bin:$PATH

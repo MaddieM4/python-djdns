@@ -21,4 +21,4 @@ else
 fi
 
 echo "Starting djdns..."
-djdns -d "$data_dir" -u $uname -g $uname -v
+djdns -d "$data_dir" -u $uname -v

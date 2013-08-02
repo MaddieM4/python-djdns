@@ -70,9 +70,8 @@ class TestMainScript(unittest.TestCase):
 
     def test_main(self):
         args = [
-            '-v'
-            #'-d', 'diskdemo',
-            #'-p', '4444',
+            '-d', 'diskdemo',
+            '-P', '4444',
         ]
         try:
             with ScriptTester(self.path, args) as p:
