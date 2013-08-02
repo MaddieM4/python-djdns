@@ -1,6 +1,9 @@
+from __future__ import unicode_literals
 from ejtp.util.compat import unittest
-from subprocess import Popen, PIPE
+
+import signal
 import time
+from subprocess import Popen, PIPE
 
 try:
     from cStringIO import StringIO
@@ -18,6 +21,8 @@ class ScriptTester(object):
         self.io_stdout = StringIO()
         self.io_stderr = StringIO()
         self.io_output = StringIO()
+
+        self.returncode = None
 
     def write(self, input):
         self.io_stdin.write(input)
@@ -50,34 +55,46 @@ class ScriptTester(object):
     def output(self):
         return self.io_output.getvalue()
 
+    def terminate(self):
+        '''
+        Stop process and return after wait.
+        '''
+        if self.returncode != None:
+            return
+        if not self.process.poll():
+            try:
+                self.process.send_signal(signal.SIGINT)
+            except:
+                pass # harmless race condition
+        self.returncode = self.process.wait()
+        self.read()
+
     def __enter__(self):
         self.process = Popen(self.argv, stdin=PIPE, stdout=PIPE, stderr=PIPE)
         return self
 
     def __exit__(self, exc_type, exc_value, exc_traceback):
-        if not self.process.poll():
-            try:
-                self.process.terminate()
-            except:
-                pass # harmless race condition
-        returncode = self.process.wait()
+        self.terminate()
         self.process = None
-        if returncode and exc_value == None:
-            raise ExternalScriptError(returncode, self.io_output.getvalue())
+        if self.returncode and exc_value == None:
+            raise ExternalScriptError(
+                self.returncode,
+                self.io_output.getvalue()
+            )
 
 class TestMainScript(unittest.TestCase):
     path = 'djdns'
 
-    def test_main(self):
+    def test_runs_at_all(self):
         args = [
             '-d', 'diskdemo',
             '-P', '4444',
         ]
-        try:
-            with ScriptTester(self.path, args) as p:
-                stderr = "stuff"
-                while stderr:
-                    (stdout, stderr) = p.read()
-                self.assertEqual(p.output, bytes())
-        except ExternalScriptError:
-            pass
+        with ScriptTester(self.path, args) as p:
+            time.sleep(1)
+            p.terminate()
+            self.assertEqual(
+                p.output,
+                b"STOPPING SERVER <pymads dns serving on ('::', 0, 1):4444>\n"
+            )
+            self.assertEqual(p.returncode, 0)
