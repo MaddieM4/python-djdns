@@ -46,7 +46,7 @@ class DJSource(Resolver):
     Testing for recursive DNS domain
 
     >>> list(source.get_from_name('example.org')) #doctest: +ELLIPSIS
-    [<record for example.org: ... A IN... 192.0.43.10>]
+    [<record for example.org: ... A IN... ...>]
 
     '''
     def __init__(self, uri = "", loader = None, rootdata = None):
