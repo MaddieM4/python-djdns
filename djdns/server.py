@@ -9,6 +9,7 @@ class DJServer(DnsServer):
     '''
     Serve DJDNS data via DNS.
 
+    >>> import re
     >>> from pymads.tests.dig import dig
     >>> from threading import Thread
 
@@ -26,10 +27,15 @@ class DJServer(DnsServer):
     >>> success_text in host_data
     True
 
+    >>> def extract(data):
+    ...     pattern = 'ANSWER SECTION:(\\n[^\\n]+)+\\n\\n'
+    ...     match = re.search(pattern, data).group(0)
+    ...     return re.sub('\\d+', '<TTL>', match, 1)
+
     >>> host_data = dig('example.org', 'localhost', port, qtype='A')
-    >>> "ANSWER SECTION:\\nexample.org.\\t\\t" in host_data
-    True
-    >>> "\\tIN\\tA\\t192.0.43.10\\n\\n" in host_data
+    >>> real_data = dig('example.org', '8.8.8.8', 53, qtype='A')
+
+    >>> extract(host_data) == extract(real_data)
     True
 
     >>> server.stop()
