@@ -1,5 +1,6 @@
 from __future__ import unicode_literals
 from ejtp.util.compat import unittest
+from pymads.tests.dig import dig
 
 import signal
 import time
@@ -98,3 +99,17 @@ class TestMainScript(unittest.TestCase):
                 b"STOPPING SERVER <pymads dns serving on ('::', 0, 1):4444>\n"
             )
             self.assertEqual(p.returncode, 0)
+
+    def test_resolution(self):
+        port = 4444
+        args = [
+            '-d', 'diskdemo',
+            '-P', str(port),
+        ]
+        with ScriptTester(self.path, args) as p:
+            host_data = dig('in.root.demo', 'localhost', port)
+            expected = "ANSWER SECTION:\n%s.\t\t1800\tIN\tA\t%s\n\n" % (
+                'in.root.demo',
+                '1.2.3.4',
+            )
+            self.assertIn(expected, host_data)
