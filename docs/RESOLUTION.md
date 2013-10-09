@@ -5,10 +5,12 @@ The DJDNS registry is broken up into *pages.* Each page has a list of *branches*
 Each branch has:
 
  * A match regex, called a *selector*
- * A list of *targets* - pages to jump to.
- * A list of *records* - actual records to return.
+ * A list of *targets* - pages to jump to (like hyperlinks).
+ * A list of *records* - actual records to return. Ignored if targets are available (prefers recursion).
 
 So to resolve a hostname like "example.com", you start at the "root page", and go down each of its branches until you find one that matches.
+
+The following diagram is simplified in some ways - the regexes and page addresses are not technically accurate, for example. However, it's a decent illustration of the actual recursive resolution mechanism, and the "diskdemo" directory in this repository gives a detailed example of how such a registry is set up.
 
 ```
 
@@ -42,9 +44,9 @@ So to resolve a hostname like "example.com", you start at the "root page", and g
   -----------------------  |
                            |
   ------ /tld/com/ ------  |
-  |                     |  |
-  | ... some branches   |  |
   |                     |<-|
+  | ... some branches   |
+  |                     |
   | --- branch N ------ |
   | |                 | |
   | | "example.com"   | | Found a regex match for "example.com"!
