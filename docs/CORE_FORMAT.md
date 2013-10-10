@@ -70,7 +70,7 @@ Each target's behavior depends on the protocol component of the URL.
  * dns://8.8.8.8/ - Ask another server via DNS protocol.
  * DEJE distribute registry - _schema to be determined._
 
-```
+```json
 {
     "selector": "(.*\\.|^)example\\.com$",
     "targets": [],
@@ -82,7 +82,7 @@ Each target's behavior depends on the protocol component of the URL.
     ]
 }
 
-OR...
+// OR...
 
 {
     "selector": "(.*\\.|^)example\\.com$",
@@ -102,6 +102,14 @@ Each record contains:
  * _rclass_ - Record class, default "AAAA"
  * _rdata_ - Record contents, in an unpacked/readable form (see [Pymads][pymads] for reference, but mostly should be straightforward/obvious)
  * *domain_name* - Selectors are usually very regex-y, and crap at representing the actual domain name of the record. This allows you to override that. It's also useful when you're providing records for multiple different domain names in a single result set.
+
+```json
+{
+    "domain_name": "example.com",
+    "rtype": "AAAA",
+    "rdata": "fc09::1234"
+}
+```
 
 # The future
 
