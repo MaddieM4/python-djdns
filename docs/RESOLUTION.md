@@ -5,8 +5,8 @@ The DJDNS registry is broken up into *pages.* Each page has a list of *branches*
 Each branch has:
 
  * A match regex, called a *selector*
- * A list of *targets* - pages to jump to (like hyperlinks).
- * A list of *records* - actual records to return. Ignored if targets are available (prefers recursion).
+ * A list of *targets* - pages to jump to (like hyperlinks). Ignored if records are available (avoids recursion).
+ * A list of *records* - actual records to return.
 
 So to resolve a hostname like "example.com", you start at the "root page", and go down each of its branches until you find one that matches.
 
@@ -61,13 +61,4 @@ The following diagram is simplified in some ways - the regexes and page addresse
 
 For a server, most of this information will be cached, but the server will download pages as necessary to fulfill a request.
 
-## Record data format
-
-Each record contains:
-
- * An optional record "type", assumed "A"
- * An optional record "class", assumed "IN"
- * Mandatory "rdata", for record contents
- * Provide-it-if-you-know-what's-good-for-ya "hostname", which will usually be different from regex.
-
-This probably deserves to be in its own section on DJDNS registry format.
+See CORE_FORMAT.md for more information about the structure/storage format in detail.
