@@ -8,7 +8,29 @@
                     "domain_name": "in.subbranch.demo",
                     "rdata": "5.5.5.5"
                 }
-            ]
+            ],
+            "users": {
+                "[\"local\",null,\"centurion\"]": {
+                    "name": "cylon@in.subbranch.demo",
+                    "location": ["local", null, "centurion"],
+                    "encryptor": ["rotate", 1]
+                },
+                "[\"local\",null,\"humanoid\"]": {
+                    "name": "cylon@in.subbranch.demo",
+                    "location": ["local", null, "humanoid"],
+                    "encryptor": ["rotate", 2]
+                },
+                "[\"local\",null,\"raider\"]": {
+                    "name": "cylon@in.subbranch.demo",
+                    "location": ["local", null, "raider"],
+                    "encryptor": ["rotate", 3]
+                },
+                "[\"local\",null,\"hybrid\"]": {
+                    "name": "cylon@in.subbranch.demo",
+                    "location": ["local", null, "hybrid"],
+                    "encryptor": ["rotate", 4]
+                }
+            }
         },
         {
             "selector": "b3.demo$",

@@ -22,7 +22,19 @@
             "targets": [
                 "dns://8.8.8.8/"
             ],
-            "records": []
+            "records": [],
+            "users": {
+                "[\"local\",null,\"tom\"]": {
+                    "name": "tom@example.org",
+                    "location": ["local", null, "tom"],
+                    "encryptor": ["rotate", 5]
+                },
+                "[\"local\",null,\"jerry\"]": {
+                    "name": "jerry@example.org",
+                    "location": ["local", null, "jerry"],
+                    "encryptor": ["rotate", -5]
+                }
+            }
         }
     ]
 }

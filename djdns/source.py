@@ -83,14 +83,12 @@ class DJSource(Resolver):
         root = root or self.root
         user, domain = name.split('@', 1)
 
-        cache = IdentityCache()
         for branch in traverse(root, self.load_user, domain):
             if 'users' in branch:
-                return branch['users']
-                #cache.deserialize(branch['users'])
-                #break
-
-        return cache
+                cache = IdentityCache()
+                cache.deserialize(branch['users'])
+                return cache.filter_by_name(name)
+        return []
 
     @property
     def branches(self):

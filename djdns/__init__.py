@@ -1,8 +1,9 @@
 #TODO: LGPL license
 
 __all__ = [
+    "loader",
     "server",
     "source",
-    "loader",
+    "traversal",
     "tests",
 ]
