@@ -1,5 +1,4 @@
-from __future__ import print_function
-
+from ejtp.identity.cache import IdentityCache
 from pymads.sources.json import toRecord
 
 from djdns.loader    import DocLoader
@@ -57,6 +56,12 @@ class DJSource(Resolver):
     def load(self, uri):
         return self.loader.load(uri)
 
+    def load_user(self, uri):
+        if uri.startswith('dns://'):
+            return None
+        else:
+            return self.load(uri)
+
     def get(self, request, root = None):
         root = root or self.root
         for branch in traverse(root, self.load, request.name):
@@ -70,7 +75,23 @@ class DJSource(Resolver):
             if results:
                 return results
         return []
-                
+
+    def get_user(self, name, root=None):
+        '''
+        Returns EJTP IdentityCache.
+        '''
+        root = root or self.root
+        user, domain = name.split('@', 1)
+
+        cache = IdentityCache()
+        for branch in traverse(root, self.load_user, domain):
+            if 'users' in branch:
+                return branch['users']
+                #cache.deserialize(branch['users'])
+                #break
+
+        return cache
+
     @property
     def branches(self):
         return self.root['branches']
