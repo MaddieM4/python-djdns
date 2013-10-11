@@ -1,10 +1,10 @@
 from __future__ import print_function
 
-import re
 from pymads.sources.json import toRecord
 
-from djdns.loader   import DocLoader
-from djdns.resolver import Resolver
+from djdns.loader    import DocLoader
+from djdns.resolver  import Resolver
+from djdns.traversal import traverse
 
 class DJSource(Resolver):
     '''
@@ -59,27 +59,18 @@ class DJSource(Resolver):
 
     def get(self, request, root = None):
         root = root or self.root
-
-        for branch in root['branches']:
-            selector = branch['selector']
-            if re.search(selector, request.name):
-                return self.resolve_from(request, branch)
+        for branch in traverse(root, self.load, request.name):
+            if isinstance(branch, Resolver):
+                results = branch.get(request)
+            else:
+                results = [
+                    toRecord(x, branch['selector'])
+                    for x in branch['records']
+                ]
+            if results:
+                return results
         return []
-
-    def resolve_from(self, request, branch):
-        if branch['records']:
-            return [toRecord(x, branch['selector']) for x in branch['records']]
-        else:
-            for target_uri in branch['targets']:
-                target  = self.load(target_uri)
-                if isinstance(target, Resolver):
-                    results = target.get(request)
-                else:
-                    results = self.get(request, target)
-                if results:
-                    return results
-            return []
-
+                
     @property
     def branches(self):
         return self.root['branches']
