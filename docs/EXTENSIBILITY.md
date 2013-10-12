@@ -10,6 +10,10 @@ Between these three rules, as long as you otherwise follow the specification lai
 
 This lays out an ideal environment for establishing standard extensions by popular convention, such that they can be adopted into the core formal standard after proving themselves in the wild.
 
+## Implemented extensions
+
+ * User registry. See IDENTITY_REGISTRATION.md.
+
 ## Planned extensions
 
 There are actually a few extensions that I'm planning to establish myself.
@@ -17,12 +21,6 @@ There are actually a few extensions that I'm planning to establish myself.
 ### Reverse DNS
 
 RDNS is not built into the current registry format. This should be pretty easy to handle by using a variant of [traditional reverse lookup](https://en.wikipedia.org/wiki/Reverse_DNS_lookup) using PTR records and the neutral \*.rdns TLD (which can then bounce to a top-level RDNS page, which bounces to separate IPv4 and IPv6 pages, and further breaking down by IP until landing on private pages that may or may not be RDNS-specific).
-
-### User registry
-
-It is not enough that a site alone be listed in the registry - no, we want to host EJTP identities there, too! Hot ones, cold ones, host all the identities. The idea is that an identity cache (expressed as a JSON object {}), according to EJTP standard format, can just be dropped into a branch as a "users" property, as a sibling to "selector", "targets", and "records".
-
-Of course, these users are only accessible if you reach the branch while traversing based on the user's hostname. For example, when the server looks for "joe@example.com", it will first look up "example.com" as if for a regular old record set, find the user data, and return the name matches for "joe@example.com" (there may be more than one, as identities are considered unique by location). So if you store that data in the wrong place, the traversal will not find it, because *duh.*
 
 ### Bitcoin addresses
 

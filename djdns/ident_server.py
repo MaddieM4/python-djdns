@@ -30,6 +30,8 @@ the following links will probably work for you.</p>
     <li><a href="/idents/philip@roaming-initiative.com">Public registry (real) example</a></li>
 </ul>
 
+<p>For more information, see <a href="https://github.com/campadrenalin/python-djdns/blob/master/docs/IDENTITY_REGISTRATION.md">the documentation.</a></p>
+
 </body>
 </html>
 '''
