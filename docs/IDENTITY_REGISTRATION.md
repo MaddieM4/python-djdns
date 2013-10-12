@@ -28,6 +28,6 @@ Of course, these users are only accessible if you reach the branch while travers
 
 Once your Identity is in the registry, people will be able to access it from any public API endpoint over HTTP, like this:
 
-http://mesh.roaming-initiative.com/idents/philip@roaming-initiative.com
+http://mesh.roaming-initiative.com/idents/philip@ri.hype
 
 This is a temporary API that doesn't even have SSL. It will be replaced with something better, because let's face it, it kinda has to be. But it should be enough (for now) to do its immediate job - bootstrapping the decentralized version of the registry.
