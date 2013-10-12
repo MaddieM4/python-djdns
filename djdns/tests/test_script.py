@@ -117,22 +117,12 @@ class TestMainScript(unittest.TestCase):
 
 class TestIdentServer(unittest.TestCase):
     path = 'python'
-
-    def test_runs_at_all(self):
-        args = ['djdns/ident_server.py']
-        with ScriptTester(self.path, args) as p:
-            time.sleep(0.2)
-            p.terminate()
-            self.assertEqual(
-                p.output,
-                b"Bottle v0.11.6 server starting up (using WSGIRefServer())...\nListening on http://127.0.0.1:8959/\nHit Ctrl-C to quit.\n\n"
-            )
-            self.assertEqual(p.returncode, 0)
+    init_wait = 1.5
 
     def test_get_user(self):
         args = ['djdns/ident_server.py']
         with ScriptTester(self.path, args) as p:
-            time.sleep(0.2) # Let server start
+            time.sleep(self.init_wait)
             r = requests.get('http://localhost:8959/idents/tom@example.org')
             self.assertEqual(
                 r.json(),
