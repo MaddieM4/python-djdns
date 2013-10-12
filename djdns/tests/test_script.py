@@ -12,6 +12,15 @@ try:
 except:
     from io import BytesIO as StringIO
 
+PROCESS_INIT_TIME = 0.75
+TOM_IDENT_JSON = {
+    '["local",null,"tom"]':{
+        'name': 'tom@example.org',
+        'encryptor': ['rotate', 5],
+        'location': ['local', None, 'tom']
+    }
+}
+
 class ExternalScriptError(Exception): pass
 
 class ScriptTester(object):
@@ -93,7 +102,7 @@ class TestMainScript(unittest.TestCase):
             '-P', '4444',
         ]
         with ScriptTester(self.path, args) as p:
-            time.sleep(1)
+            time.sleep(PROCESS_INIT_TIME)
             p.terminate()
             self.assertEqual(
                 p.output,
@@ -116,23 +125,28 @@ class TestMainScript(unittest.TestCase):
             )
             self.assertIn(expected, host_data)
 
+    def test_has_ident_server(self):
+        args = [
+            '-d', 'diskdemo',
+            '-P', '4444',
+        ]
+        with ScriptTester(self.path, args) as p:
+            time.sleep(PROCESS_INIT_TIME)
+            r = requests.get('http://localhost:16232/idents/tom@example.org')
+            self.assertEqual(r.json(), TOM_IDENT_JSON)
+            self.assertEqual(r.status_code, 200)
+
 class TestIdentServer(unittest.TestCase):
     path = 'python'
-    init_wait = 1.5
 
     def test_get_user(self):
         args = ['djdns/ident_server.py']
         with ScriptTester(self.path, args) as p:
-            time.sleep(self.init_wait)
+            time.sleep(PROCESS_INIT_TIME)
             r = requests.get('http://localhost:16232/idents/tom@example.org')
-            self.assertEqual(
-                r.json(),
-                {
-                    '["local",null,"tom"]':{
-                        'name': 'tom@example.org',
-                        'encryptor': ['rotate', 5],
-                        'location': ['local', None, 'tom']
-                    }
-                }
-            )
+            self.assertEqual(r.json(), TOM_IDENT_JSON)
             self.assertEqual(r.status_code, 200)
+
+            r = requests.get('http://localhost:16232/idents/nobody@example.org')
+            self.assertEqual(r.json(), {})
+            self.assertEqual(r.status_code, 404)
