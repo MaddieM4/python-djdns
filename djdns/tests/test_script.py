@@ -2,6 +2,7 @@ from __future__ import unicode_literals
 from ejtp.util.compat import unittest
 from pymads.tests.dig import dig
 
+import requests
 import signal
 import time
 from subprocess import Popen, PIPE
@@ -120,10 +121,27 @@ class TestIdentServer(unittest.TestCase):
     def test_runs_at_all(self):
         args = ['djdns/ident_server.py']
         with ScriptTester(self.path, args) as p:
-            time.sleep(1)
+            time.sleep(0.2)
             p.terminate()
             self.assertEqual(
                 p.output,
                 b"Bottle v0.11.6 server starting up (using WSGIRefServer())...\nListening on http://127.0.0.1:8959/\nHit Ctrl-C to quit.\n\n"
             )
             self.assertEqual(p.returncode, 0)
+
+    def test_get_user(self):
+        args = ['djdns/ident_server.py']
+        with ScriptTester(self.path, args) as p:
+            time.sleep(0.2) # Let server start
+            r = requests.get('http://localhost:8959/idents/tom@example.org')
+            self.assertEqual(
+                r.json(),
+                {
+                    '["local",null,"tom"]':{
+                        'name': 'tom@example.org',
+                        'encryptor': ['rotate', 5],
+                        'location': ['local', None, 'tom']
+                    }
+                }
+            )
+            self.assertEqual(r.status_code, 200)
