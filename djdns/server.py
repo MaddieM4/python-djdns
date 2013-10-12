@@ -1,5 +1,3 @@
-from __future__ import print_function
-
 from pymads.server import DnsServer
 from pymads.chain  import Chain
 

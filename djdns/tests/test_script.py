@@ -113,3 +113,17 @@ class TestMainScript(unittest.TestCase):
                 '1.2.3.4',
             )
             self.assertIn(expected, host_data)
+
+class TestIdentServer(unittest.TestCase):
+    path = 'python'
+
+    def test_runs_at_all(self):
+        args = ['djdns/ident_server.py']
+        with ScriptTester(self.path, args) as p:
+            time.sleep(1)
+            p.terminate()
+            self.assertEqual(
+                p.output,
+                b"Bottle v0.11.6 server starting up (using WSGIRefServer())...\nListening on http://127.0.0.1:8959/\nHit Ctrl-C to quit.\n\n"
+            )
+            self.assertEqual(p.returncode, 0)
