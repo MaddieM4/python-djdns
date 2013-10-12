@@ -97,7 +97,8 @@ class TestMainScript(unittest.TestCase):
             p.terminate()
             self.assertEqual(
                 p.output,
-                b"STOPPING SERVER <pymads dns serving on ('::', 0, 1):4444>\n"
+                b"STOPPING SERVER <pymads dns serving on ('::', 0, 1):4444>\n"+
+                b"STOPPING SERVER <djdns IdentServer on '::':16232>\n"
             )
             self.assertEqual(p.returncode, 0)
 
@@ -123,7 +124,7 @@ class TestIdentServer(unittest.TestCase):
         args = ['djdns/ident_server.py']
         with ScriptTester(self.path, args) as p:
             time.sleep(self.init_wait)
-            r = requests.get('http://localhost:8959/idents/tom@example.org')
+            r = requests.get('http://localhost:16232/idents/tom@example.org')
             self.assertEqual(
                 r.json(),
                 {

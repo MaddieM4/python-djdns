@@ -1,3 +1,5 @@
+import os
+
 from ejtp.util.compat import unittest
 from ejtp.identity    import Identity, IdentityCache
 
@@ -10,7 +12,11 @@ class TestRegularTraversal(unittest.TestCase):
 
 class TestUserTraversal(unittest.TestCase):
     def setUp(self):
-        self.source = DJSource('diskdemo/root.json')
+        os.chdir('diskdemo')
+        self.source = DJSource('root.json')
+
+    def tearDown(self):
+        os.chdir('..')
 
     def compareTraversal(self, domain, expected):
         traversal = traverse(

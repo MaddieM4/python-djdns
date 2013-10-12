@@ -13,7 +13,7 @@
         {
             "selector": "(subbranch|b3).demo$",
             "targets": [
-                "diskdemo/subbranch.json"
+                "subbranch.json"
             ],
             "records": []
         },

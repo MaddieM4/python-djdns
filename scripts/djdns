@@ -7,11 +7,13 @@ import os
 import sys
 import grp
 import pwd
+import signal
 import threading
 import time
 import traceback
 
 from djdns.server import DJServer
+from djdns.ident_server import IdentServer
 
 def get_uid(username):
     return pwd.getpwnam(username).pw_uid
@@ -32,14 +34,21 @@ def serve_threaded(server):
     return thread
 
 def serve_wait(*servers):
-    try:
-        while True:
-            time.sleep(1)
-            for server in servers:
-                if not server.serving:
-                    break
-    except KeyboardInterrupt:
-        pass
+    # Easy hack to pass by reference, allowing callback to change it.
+    interrupted = [False]
+
+    # Using the signal library ensures that we always catch the
+    # interrupts in the main thread. Which is way simpler.
+    def on_interrupt(sig, frame):
+        interrupted[0] = True
+        signal.signal(signal.SIGINT, signal.SIG_DFL)
+    signal.signal(signal.SIGINT, on_interrupt)
+
+    while not interrupted[0]:
+        time.sleep(1)
+        for server in servers:
+            if not server.serving:
+                break
 
     for server in servers:
         print("STOPPING SERVER", server)
@@ -88,17 +97,26 @@ def main(dir='.',
     os.chdir(dir)
 
     if ':' in host: #IPv6
-        host = (host, 0, 1)
+        host_tuple = (host, 0, 1)
+    else:
+        host_tuple = host
+
+    if verbose:
+        log_level = 'DEBUG'
+    else:
+        log_level = 'WARN'
 
     config = {
-        'listen_host': host,
+        'listen_host': host_tuple,
         'listen_port': port,
         'path'  : root,
-        'debug' : verbose,
+        'log'   : log_level,
     }
 
     server = DJServer(**config)
     server.bind()
+
+    ident_server = IdentServer(server.source, host=host, port=16232)
 
     if user:
         group = user
@@ -114,7 +132,8 @@ def main(dir='.',
         print(ROOT_WARNING, file=sys.stderr)
 
     server.thread = serve_threaded(server)
-    serve_wait(server)
+    ident_server.thread = serve_threaded(ident_server)
+    serve_wait(server, ident_server)
 
 if __name__ == '__main__':
     dispatch_command(main, completion=False)

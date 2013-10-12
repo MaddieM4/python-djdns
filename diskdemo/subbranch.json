@@ -35,7 +35,7 @@
         {
             "selector": "b3.demo$",
             "targets": [
-                "diskdemo/b3.json"
+                "b3.json"
             ],
             "records": []
         }

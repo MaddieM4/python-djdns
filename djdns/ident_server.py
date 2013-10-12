@@ -1,6 +1,10 @@
-import bottle
-import json
+try:
+    from BaseHTTPServer import HTTPServer, BaseHTTPRequestHandler
+except ImportError:
+    from http.server import HTTPServer, BaseHTTPRequestHandler
 
+import json
+import socket
 from ejtp.identity import IdentityCache
 
 INTRO_TEXT = '''
@@ -30,35 +34,91 @@ the following links will probably work for you.</p>
 </html>
 '''
 
-class IdentServer(object):
-    def __init__(self, source, **kwargs):
-        self.source = source
-        self.bottle = bottle.Bottle()
-        self.bottle.route('/', callback=self.intro)
-        self.bottle.route('/idents/:name', callback=self.get_ident)
-        self.config = kwargs
+NOT_FOUND_TEXT = '''
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Not found</title>
+</head>
+<body>
+<h2>404 Not Found</h2>
 
-    def serve(self):
-        self.bottle.run(**self.config)
+<p>Sorry.</p>
+</html>
+'''
+
+class Handler(BaseHTTPRequestHandler):
+
+    def result(self, code, content_type, data):
+        self.send_response(code)
+        self.send_header('Content-type', content_type+'; charset=utf-8')
+        self.end_headers()
+        self.wfile.write(data)
+
+    def do_GET(self):
+        if self.path == '/':
+            return self.intro()
+        elif self.path.startswith('/idents/'):
+            return self.get_ident(self.path[8:])
+        else:
+            return self.not_found()
 
     def intro(self):
-        return [INTRO_TEXT]
+        return self.result(200, 'text/html', INTRO_TEXT)
 
     def get_ident(self, name):
         cache = IdentityCache()
         cache.update_idents(self.source.get_user(name))
 
         if len(cache.all()) > 0:
-            bottle.response.status = 200
+            status = 200
         else:
-            bottle.response.status = 404
+            status = 404
 
-        return cache.serialize()
+        payload = json.dumps(cache.serialize())
+        if bytes != str:
+            payload = bytes(payload, 'utf-8')
+        return self.result(status, 'application/json', payload)
+
+    def not_found(self):
+        return self.result(404, 'text/html', NOT_FOUND_TEXT)
+
+    @property
+    def source(self):
+        return self.server.parent.source
+
+class HTTPServerIPv6(HTTPServer):
+    address_family = socket.AF_INET6
+
+class IdentServer(object):
+    def __init__(self, source, host='::', port=16232):
+        self.source = source
+        self.serving = False
+        self.addr = (host, port)
+        self.server = HTTPServerIPv6(self.addr, Handler)
+        self.server.parent = self
+
+    def __repr__(self):
+        return "<djdns IdentServer on '{0}':{1}>".format(*self.addr)
+
+    def serve(self):
+        self.serving = True
+        while self.serving:
+            self.server.handle_request()
+        self.server.server_close()
+
+    def stop(self):
+        self.serving = False
 
 def serve_standalone():
     from djdns.source import DJSource
-    server = IdentServer(DJSource('diskdemo/root.json'), port=8959)
-    server.serve()
+    import os
+    os.chdir('diskdemo')
+    server = IdentServer(DJSource('root.json'))
+    try:
+        server.serve()
+    except KeyboardInterrupt:
+        server.stop()
 
 if __name__ == '__main__':
     serve_standalone()

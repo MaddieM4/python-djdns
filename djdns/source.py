@@ -15,7 +15,9 @@ class DJSource(Resolver):
     dictlike object (used for traversal). Blocking is fine.
 
     >>> from pymads.request import Request
-    >>> source = DJSource('diskdemo/root.json')
+    >>> import os
+    >>> os.chdir("diskdemo")
+    >>> source = DJSource('root.json')
 
     >>> r_root   = 'in.root.demo'
     >>> r_branch = 'in.subbranch.demo'
