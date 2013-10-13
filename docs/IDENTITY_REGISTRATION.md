@@ -17,11 +17,11 @@ Of course, these users are only accessible if you reach the branch while travers
         },
     }
 }
-```
+``````
 
 ## How to add your own identities
 
-1. Make an EJTP Identity (leaving this as an exercise to the reader, until I have the fancy new interactive Identity creator working).
+1. Make an EJTP Identity (using `ejtp-identity new-interactive`)
 2. Make sure you have a private page for your domain(s).
 3. Make sure the name is in email-address form, like "mike@rowe.net", where the domain is a domain in your DJDNS private page.
 4. Embed the identity cache in your domain's branch.
